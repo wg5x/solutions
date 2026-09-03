@@ -142,7 +142,7 @@ DSH desktop 不是商品本身，它是统一交付底座。
 ```text
 project/
   market/
-    xianyu/
+    闲鱼/
       listings/
       titles/
       intros/
@@ -158,10 +158,10 @@ project/
 
 ### 5.2 闲鱼目录
 
-`market/xianyu/` 只放前台包装物料：
+`market/闲鱼/` 只放前台包装物料：
 
 ```text
-market/xianyu/
+market/闲鱼/
   listings/
     deep-research/
     data-analysis/
