@@ -108,11 +108,25 @@ goofish 上架时，不写内部能力名，写的是用户能听懂的结果。
 
 ## 4. DSH desktop 统一交付层
 
-DSH desktop 不是商品本身，它是统一交付底座。
+DSH desktop 就是统一交付底座本身，也是用户实际启动的桌面端程序。
 
-### 4.1 底座包含什么
+当前首个交付目标是一个 macOS 绿色桌面包：
+
+- 双击即可启动 DSH desktop
+- 在 DSH Desktop 中配置模型
+- 完成最基础的 DSH 对话
+- 用户数据写入本机可写目录，程序目录保持可复制
+- 不预装任何领域能力包
+- 不把连接器、MCP 或开发者 Agent 作为本阶段产品
+
+后续的深度调研、数据分析、专利、招投标等能力包，都是挂载到同一个
+DSH desktop 上的独立交付单元，不是新的桌面底座。
+
+### 4.1 底座规划能力
 
 - 桌面端主壳
+- 桌面端窗口与本地运行生命周期管理
+- 模型配置和基础对话入口
 - 证据底座
 - 状态管理
 - 权限和审计
@@ -206,11 +220,15 @@ project/
       bidding/
       embodied-intelligence/
   desktop/
-    dsh/
-      core/
-      packs/
-      registry.md
+    app/
+    runtime/
+    scripts/
+    tests/
+    package.json
+    run-dsh-desktop.command
 ```
+
+当前仓库的 `desktop/` 就是统一交付底座根目录，不再增加额外的中间层。
 
 ### 6.2 官网目录
 
@@ -259,51 +277,49 @@ market/goofish/
 
 ### 6.4 DSH desktop 目录
 
-`desktop/dsh/` 只放统一交付底座和能力包：
+`desktop/` 直接就是统一交付底座。首个版本只有一个可以启动和对话的
+macOS 桌面端，不创建任何能力包目录：
 
 ```text
-desktop/dsh/
-  core/
-    evidence/
-    permissions/
-    audit/
-    export/
-    connectors/
-  packs/
-    horizontal/
-      deep-research/
-      data-analysis/
-      document-report/
-      knowledge-base/
-      customer-assist/
-      multimodal-workbench/
-    vertical/
-      patent/
-      bidding/
-      embodied-intelligence/
-  registry.md
+desktop/
+  app/
+    main.mjs
+    preload.cjs
+    renderer/
+  runtime/
+  scripts/
+  tests/
+  package.json
+  package-lock.json
+  run-dsh-desktop.command
 ```
+
+模型配置保存在 macOS 用户数据目录，桌面程序目录保持可复制；绿色包生成在
+`desktop/release/mac-green/`，该目录不作为源码交付内容。
+
+能力包从后续版本开始放入 `desktop/packs/`，并通过同一个 DSH desktop
+启动和交付。当前版本不创建 `desktop/packs/`、`desktop/core/` 或任何领域包。
 
 ### 6.5 前台和后台一一对应
 
 官网产品目录、goofish 商品目录都对应一个后台能力包目录：
 
-- `website/deep-research/` 与 `market/goofish/deep-research/` 对应 `desktop/dsh/packs/horizontal/deep-research/`
-- `website/data-analysis/` 与 `market/goofish/data-analysis/` 对应 `desktop/dsh/packs/horizontal/data-analysis/`
-- `website/document-report/` 与 `market/goofish/document-report/` 对应 `desktop/dsh/packs/horizontal/document-report/`
-- `website/knowledge-base/` 与 `market/goofish/knowledge-base/` 对应 `desktop/dsh/packs/horizontal/knowledge-base/`
-- `website/customer-assist/` 与 `market/goofish/customer-assist/` 对应 `desktop/dsh/packs/horizontal/customer-assist/`
-- `website/multimodal-workbench/` 与 `market/goofish/multimodal-workbench/` 对应 `desktop/dsh/packs/horizontal/multimodal-workbench/`
-- `website/patent/` 与 `market/goofish/patent/` 对应 `desktop/dsh/packs/vertical/patent/`
-- `website/bidding/` 与 `market/goofish/bidding/` 对应 `desktop/dsh/packs/vertical/bidding/`
-- `website/embodied-intelligence/` 与 `market/goofish/embodied-intelligence/` 对应 `desktop/dsh/packs/vertical/embodied-intelligence/`
+- `website/deep-research/` 与 `market/goofish/deep-research/` 对应 `desktop/packs/horizontal/deep-research/`
+- `website/data-analysis/` 与 `market/goofish/data-analysis/` 对应 `desktop/packs/horizontal/data-analysis/`
+- `website/document-report/` 与 `market/goofish/document-report/` 对应 `desktop/packs/horizontal/document-report/`
+- `website/knowledge-base/` 与 `market/goofish/knowledge-base/` 对应 `desktop/packs/horizontal/knowledge-base/`
+- `website/customer-assist/` 与 `market/goofish/customer-assist/` 对应 `desktop/packs/horizontal/customer-assist/`
+- `website/multimodal-workbench/` 与 `market/goofish/multimodal-workbench/` 对应 `desktop/packs/horizontal/multimodal-workbench/`
+- `website/patent/` 与 `market/goofish/patent/` 对应 `desktop/packs/vertical/patent/`
+- `website/bidding/` 与 `market/goofish/bidding/` 对应 `desktop/packs/vertical/bidding/`
+- `website/embodied-intelligence/` 与 `market/goofish/embodied-intelligence/` 对应 `desktop/packs/vertical/embodied-intelligence/`
 
 ### 6.6 单个能力包目录
 
 每个包都保持同样的内部骨架：
 
 ```text
-desktop/dsh/packs/<pack-name>/
+desktop/packs/<pack-name>/
   manifest.md
   scope.md
   workflow.md
@@ -333,8 +349,8 @@ desktop/dsh/packs/<pack-name>/
 - `website/` 是品牌和获客前台
 - `market/goofish/` 是商品成交前台
 - `desktop/` 是交付底座
-- `packs/` 是能力包
-- `core/` 是共用底座
+- `desktop/packs/` 是后续能力包
+- `desktop/core/` 是后续共用底座能力
 - `horizontal/` 和 `vertical/` 是能力包分组
 
 ## 7. 开发顺序

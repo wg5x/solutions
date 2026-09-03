@@ -3,3 +3,6 @@
 docs/.DS_Store
 docs/superpowers/.DS_Store
 market/goofish/preview/.cache/
+desktop/node_modules/
+desktop/release/
+desktop/.cache/

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DSH Desktop</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <div class="brand">DSH Desktop</div>
+          <div class="subtitle">模型配置与基础对话</div>
+        </div>
+        <div id="status" class="status">准备就绪</div>
+      </header>
+
+      <main class="workspace">
+        <section class="panel settings-panel">
+          <div class="panel-head">
+            <h2>模型配置</h2>
+            <p>先保存配置，再发起对话。</p>
+          </div>
+          <form id="settings-form" class="stack">
+            <label class="field">
+              <span>模型服务地址</span>
+              <input id="provider-base-url" type="url" placeholder="https://api.deepseek.com" />
+            </label>
+            <label class="field">
+              <span>API Key</span>
+              <input id="api-key" type="password" placeholder="sk-..." />
+            </label>
+            <label class="field">
+              <span>模型名称</span>
+              <input id="model" type="text" placeholder="deepseek-chat" />
+            </label>
+            <label class="field">
+              <span>系统提示</span>
+              <textarea id="system-prompt" rows="6"></textarea>
+            </label>
+            <label class="field">
+              <span>Temperature</span>
+              <input id="temperature" type="number" min="0" max="2" step="0.1" />
+            </label>
+            <div class="actions">
+              <button type="submit">保存配置</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel chat-panel">
+          <div class="panel-head">
+            <h2>基础对话</h2>
+            <p>一句一句说，结果直接显示在这里。</p>
+          </div>
+          <div id="conversation" class="conversation" aria-live="polite"></div>
+          <form id="chat-form" class="chat-form">
+            <label class="field">
+              <span>消息</span>
+              <textarea id="message-input" rows="4" placeholder="输入要问的问题"></textarea>
+            </label>
+            <div class="actions">
+              <button type="submit">发送</button>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
